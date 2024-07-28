@@ -7,14 +7,24 @@ using TMPro; // UIを使用する場合
 
 public class DiceRoll : MonoBehaviour
 {
-     public float rollDuration = 1.5f; // 転がる時間
-    public Vector3 rollRotation = new Vector3(360, 0, 0); // 転がる回転量
+    public float rollDuration = 1.5f; // 転がる時間
+    public Vector3 rollRotation = new Vector3(360, 360, 360); // 転がる回転量
     public TextMeshProUGUI scoreText; // スコアを表示するためのUI Text
 
     private bool isStopped = false;
 
     void Start()
     {
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true; // 物理シミュレーションを無効化
+        }
+
+        // サイコロの初期位置と回転をリセット
+        transform.position = Vector3.zero;
+        transform.rotation = Quaternion.identity;
+
         RollDice();
     }
 
