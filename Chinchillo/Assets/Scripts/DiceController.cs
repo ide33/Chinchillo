@@ -10,12 +10,21 @@ public class DiceController : MonoBehaviour
     public Transform bowlTransform; // 皿のTransform
     public Button rollButton; // サイコロを転がすボタン
     public TextMeshProUGUI scoreText; // スコアを表示するTextMeshProのUI
+    public AudioClip rollSE; // サイコロを転がすときのサウンドエフェクト
+    public AudioClip bgm; // バックグラウンドミュージック
 
+    private AudioSource audioSource; // AudioSourceコンポーネント
     private int score; // 現在のスコア
     private bool isRolling = false; // サイコロが転がっているかどうか
 
     void Start()
     {
+        // BGMを再生
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.clip = bgm;
+        audioSource.loop = true;
+        audioSource.Play();
+
         // ボタンにクリックイベントを追加
         rollButton.onClick.AddListener(RollDices);
         scoreText.text = "Score: 0"; // 初期スコアの表示
@@ -32,7 +41,19 @@ public class DiceController : MonoBehaviour
     void RollDices()
     {
         isRolling = true;
-        score = 0;
+
+         // サイコロを転がすサウンドエフェクトを再生
+        if (rollSE != null)
+        {
+            audioSource.PlayOneShot(rollSE);
+        }
+        else
+        {
+            Debug.LogWarning("Roll SE clip is not set.");
+        }
+
+        // サイコロを転がすサウンドエフェクトを再生
+        audioSource.PlayOneShot(rollSE);
 
         foreach (GameObject dice in diceObjects)
         {
@@ -74,6 +95,7 @@ public class DiceController : MonoBehaviour
 
     void CalculateScore()
     {
+        int roundScore = 0; // 今回のラウンドのスコア
         List<int> diceResults = new List<int>();
 
         foreach (GameObject dice in diceObjects)
@@ -118,6 +140,7 @@ public class DiceController : MonoBehaviour
             }
         }
 
+        score += roundScore; // 現在のスコアにラウンドスコアを加算
         scoreText.text = "Score: " + score;
     }
 
