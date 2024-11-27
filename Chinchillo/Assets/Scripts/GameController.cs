@@ -36,8 +36,15 @@ public class GameController : MonoBehaviour
     {
         int result = diceEvaluator.EvaluateTopFace(dice, bowlTransform.position);
 
-        // スコアの加算
-        roundScore += (result == -1) ? -20 : result; // ペナルティ適用
+        // スコアの加算（条件文を使用）
+        if (result == -1)
+        {
+            roundScore += -20; // ペナルティ適用
+        }
+        else
+        {
+            roundScore += result; // 出目を加算
+        }
     }
 
     // スコアを更新
