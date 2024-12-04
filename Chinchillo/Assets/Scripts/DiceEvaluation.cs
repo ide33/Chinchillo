@@ -4,38 +4,57 @@ using UnityEngine;
 
 public class DiceEvaluation : MonoBehaviour
 {
-    [SerializeField] private Rigidbody rb;  // サイコロのRigidbody
+    [SerializeField] private List<Rigidbody> diceRigidbodies;  // サイコロのRigidbodyリスト
 
-    [SerializeField] private List<GameObject> diceObjects; // シーンに配置しているサイコロのリスト
-    public int DiceNumber { get; private set; }  // 出目を公開するプロパティ
+    private Dictionary<GameObject, int> diceNumbers = new Dictionary<GameObject, int>();  // 各サイコロの出目を管理するリスト
+
+    public List<int> DiceNumbers
+    {
+        get
+        {
+            return new List<int>(diceNumbers.Values);  // 出目リストを公開
+        }
+    }
+
+    void Start()
+    {
+        foreach (var dice in diceRigidbodies)
+        {
+            diceNumbers[dice.gameObject] = 0;  // 全てのサイコロの出目を初期化
+        }
+    }
+
 
     // コライダーがトリガーゾーンに留まっている間に呼び出される
     private void OnTriggerStay(Collider col)
     {
-        if (rb.IsSleeping())  // サイコロが完全に静止したとき
+        foreach (var rb in diceRigidbodies)
         {
-            switch (col.gameObject.name)  // 接触しているオブジェクトを判定
+            if (rb.IsSleeping())  // サイコロが完全に静止したとき
             {
-                case "1":
-                    DiceNumber = 6;
-                    break;
-                case "2":
-                    DiceNumber = 5;
-                    break;
-                case "3":
-                    DiceNumber = 4;
-                    break;
-                case "4":
-                    DiceNumber = 3;
-                    break;
-                case "5":
-                    DiceNumber = 2;
-                    break;
-                case "6":
-                    DiceNumber = 1;
-                    break;
+                switch (col.gameObject.name)  // 接触しているオブジェクトを判定
+                {
+                    case "1":
+                        diceNumbers[rb.gameObject] = 6;
+                        break;
+                    case "2":
+                        diceNumbers[rb.gameObject] = 5;
+                        break;
+                    case "3":
+                        diceNumbers[rb.gameObject] = 4;
+                        break;
+                    case "4":
+                        diceNumbers[rb.gameObject] = 3;
+                        break;
+                    case "5":
+                        diceNumbers[rb.gameObject] = 2;
+                        break;
+                    case "6":
+                        diceNumbers[rb.gameObject] = 1;
+                        break;
+                }
+                Debug.Log($"サイコロ: {rb.gameObject.name},出目: {diceNumbers[rb.gameObject]}"); // 確認用
             }
-            Debug.Log($"出目: {DiceNumber}"); // 確認用
         }
     }
 }

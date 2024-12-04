@@ -85,20 +85,20 @@
 //         }
 //         scoreText.text = "Player: " + playerScore + " | CPU: " + cpuScore;  //現在のプレイヤーとCPUのスコアを表示するテキストを更新
 
-//         // 次のターンへ
-//         isPlayerTurn = !isPlayerTurn;
-//         if (isPlayerTurn)
-//         {
-//             currentRound++;
-//         }
+        // // 次のターンへ
+        // isPlayerTurn = !isPlayerTurn;
+        // if (isPlayerTurn)
+        // {
+        //     currentRound++;
+        // }
 
-//         if (currentRound <= totalRounds)
-//         {
-//             if (!isPlayerTurn)
-//             {
-//                 StartCoroutine(CPURoll());
-//             }
-//         }
+        // if (currentRound <= totalRounds)
+        // {
+        //     if (!isPlayerTurn)
+        //     {
+        //         StartCoroutine(CPURoll());
+        //     }
+        // }
 //         else
 //         {
 //             DetermineWinner();
